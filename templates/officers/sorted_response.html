@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if is_officer %}
+
+<!-- Navbar  -->
+{% include 'partials/_navbar-officer.html' %}
+
+<!--Alerts included here -->
+{% include 'partials/_alerts.html' %}
+
+<!-- Main Content Start -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-4">
+                    <p>
+                        <b>Case Number:</b><br>
+                        {{response.respond_to_case_type}}/{{response.respond_to_case_number}}/{{response.respond_to_case_year}}
+                    </p>
+                </div>
+                <div class="col-4">
+                    <p>
+                        <b>Response filing timestamp:</b><br>
+                        {{response.response_time}}
+                    </p>
+                </div>
+                <div class="col-4">
+                    <p>
+                        <b>Filed by:</b><br>
+                        <span>{{response.advocate_hc_code}} - {{response.responding_advocate.first_name}} {{response.responding_advocate.last_name}}</span>
+                    </p>
+                </div>
+                <div class="col-4">
+                    <b>Sanat Number: </b><br>
+                    <span>{{response.sanat_number}}</span>
+                    <span style="font-size: small; color: green;"><br><p>Sanat number is not required in party-in-person ('PIP') application.</p></span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12">
+                    <p>
+                        <b>Is the matter ruled? </b>
+                        {% if response.ruled_matter is True %}
+                            <span>Yes</span>
+                        {% else %}
+                            <span>No</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12">
+                    <p>
+                        <b>1. Vakalatnama:</b>
+                        <a href="{{response.vnamFile.url}}" target="_blank">File [PDF]</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>2. Affidavit in reply:</b>
+                        <span class="others">
+                            {% if 'False' in response.affidavit_in_response.url %}
+                                <span>No</span>
+                            {% else%}
+                                <a href="{{response.affidavit_in_response.url}}" target="_blank">File [PDF]</a>
+                            {% endif %}
+                        </span>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>3. Further Affidavit in reply:</b>
+                        <span class="others">
+                            {% if 'False' in response.further_affidavit.url %}
+                                <span>No</span>
+                            {% else%}
+                                <a href="{{response.further_affidavit.url}}" target="_blank">File [PDF]</a>
+                            {% endif %}
+                        </span>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>4. Other files:</b>
+                        <span class="others">
+                            {% if 'False' in response.othFile.url %}
+                                <span>No</span>
+                            {% else%}
+                                <a href="{{response.othFile.url}}" target="_blank">File [PDF]</a>
+                            {% endif %}
+                        </span>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>Note of Advocate:</b>
+                        <mark>{{ response.response_note }}</mark>
+                    </p>
+                </div>
+                <br>
+                <form action="{% url 'accept_response' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="response_id" value="{{response.id}}">
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <p>
+                                <b>Comments:</b>
+                                {{ response.response_comments }}
+                            </p>
+                        </div>
+                    </div>
+                    <br>
+                </form>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<h1>This page is for office use only!</h1>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if is_officer %}
+
+<!-- Navbar  -->
+{% include 'partials/_navbar-officer.html' %}
+
+<!--Alerts included here -->
+{% include 'partials/_alerts.html' %}
+
+<!-- Main Content Start -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-md-4 col-sm-12">
+                    <p>
+                        <b>Matter type: </b>
+                        {{filing.matter_type}}
+                    </p>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <p>
+                        <b>Case type: </b>
+                        {{filing.case_type}}
+                    </p>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <p>
+                        <b>Bench type: </b>
+                        {{filing.bench_type}}
+                    </p>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <p>
+                        <b>Sorted by: </b>
+                        {% filter upper %}{{ filing.officer_stamp }}{% endfilter %}
+                    </p>
+                </div>
+                <br>
+                <div class="col-12 row">
+                    <p class="col-md-4 col-sm-12">
+                        <b>Act/Provision/Rules: </b>
+                        {{filing.rules}}
+                    </p>
+                    <p class="col-md-4 col-sm-12">
+                        <b>Filed by: </b>
+                        {{ filing.advocate_hc_code}} - {{ filing.filing_advocate.first_name }} {{ filing.filing_advocate.last_name }}
+                    </p>
+                    <div class="col-md-4 col-sm-12">
+                        <b>Sanat Number: </b><br>
+                        <span>{{filing.sanat_number}}</span>
+                        <span style="font-size: small; color: green;"><br><p>Sanat number is not required in party-in-person ('PIP') application.</p></span>
+                    </div>
+                    <p class="col-md-4 col-sm-12">
+                        <b>Vakalatnama: </b>
+                        <a href="{{filing.vnamFile.url}}" target="_blank">Vakalatnama</a>
+                    </p>
+                </div>
+                <br>
+                <div class="col-12">
+                    <p>
+                        <b>Connected matter: </b>
+                        {% if filing.connected_case %}
+                            <mark><b style="color: red;">{{filing.connected_case_type}}/{{filing.connected_case_number}}/{{filing.connected_case_year}}</b></mark>
+                        {% else %}
+                        <span class="notConnected">No</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <br>
+                <div class="col-12">
+                    <p>
+                        <b>Urgency: </b>
+                        {% if filing.filing_urgency %}
+                        <a href="{{filing.urgencyFile.url}}" style="color: red;" target="_blank">Yes [Urgency Note here]</a>
+                        {% else %}
+                        <span class="noUrgency">No</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <br>
+                <div class="col-12">
+                    <p>
+                        <b>1. Index: </b>
+                        <a href="{{filing.indexFile.url}}" target="_blank">Index file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>2. List of events: </b>
+                        <a href="{{filing.LoEventsFile.url}}" target="_blank">Event list file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>3. Synopsis: </b>
+                        <a href="{{filing.synopsisFile.url}}" target="_blank">Synopsis file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>4. Memo of Petetion/ Application/ Appeal with Affidavit: </b>
+                        <a href="{{filing.memoFile.url}}" target="_blank">Memo and Affidavit file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>5. Impunged Order/ Judgement/ FIR/ Chargesheet: </b>
+                        <a href="{{filing.pastFile.url}}" target="_blank">Impunged Order/ Judgement/ FIR/ Chargesheet file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>6. Annextures: </b>
+                        <a href="{{filing.annexFile.url}}" target="_blank">Annextures file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>7. Memo of Petetion/ Application/ Appeal with Affidavit: </b>
+                        <a href="{{filing.memoFile.url}}" target="_blank">Memo and Affidavit file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>8. Other files: </b>
+                        <span class="noOther">N.A.</span>
+                        <span class="others"><a href="{{filing.othFile.url}}" target="_blank">Other files pdf</a></span>
+                    </p>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-12">
+                        <p>
+                            <b>Office comments:</b>
+                            {{ filing.filing_comments }}
+                        </p>
+                    </div>
+                </div>
+                <br>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <u>
+                                <h3>Checklist</h3>
+                            </u>
+                        </div>
+                        <div class="col-sm-12">
+                            <p>Check if improper as per checklist per Rule 32-A</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule8" id="rule8"
+                                {% if filing.checklist_8 %} checked {% endif %} disabled>
+                            <label class="form-check-label" for="rule8">
+                                Sr. No. 8: Memo of Petition / Appeal is signed
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule9" id="rule9"
+                                {% if filing.checklist_9 %} checked {% endif %} disabled>
+                            <label class="form-check-label" for="rule9">
+                                Sr. No. 9: Duly signed and affirmed Affidavit in Support is filed
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule10" id="rule10"
+                                {% if filing.checklist_10 %} checked {% endif %} disabled>
+                            <label class="form-check-label" for="rule10">
+                                Sr. No. 10: Vakalatnama signed by all Petitioners / Appellants & accepted by Advocate,
+                                filed
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule11" id="rule11"
+                                {% if filing.checklist_11 %} checked {% endif %} disabled>
+                            <label class="form-check-label" for="rule11">
+                                Sr. No. 11: The Provisions of Law under which the matter is filed, is stated
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule15" id="rule15"
+                                {% if filing.checklist_15 %} checked {% endif %} disabled>
+                            <label class="form-check-label" for="rule15">
+                                Sr. No. 15: Whether Certified Copies of following filed ?
+                                Appellate Judgment, Appellate Decree, Appeal Memo,
+                                Trail Court Judgment, Trail Court Decree, Bill of Costs
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule16" id="rule16"
+                                {% if filing.checklist_16 %} checked {% endif %} disabled>
+                            <label class="form-check-label" for="rule16">
+                                Sr. No. 16: Names of the parties tally with names in the Certified Copies
+                                <b>(Office NOT to raise Objection No. 13 - If the victim avails of the Right to Appeal
+                                    provided
+                                    under Sec. 372 of
+                                    Cr.P.C.)</b>
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule17" id="rule17"
+                                {% if filing.checklist_17 %} checked {% endif %} disabled>
+                            <label class="form-check-label" for="rule17">
+                                Sr. No. 17: Names, Designations, Full Address, Age, Sex, Mobile Number, E-mail address
+                                of
+                                all
+                                parties are given and in
+                                case, if name is shown in initials i.e. J.K. Patel, whether the full name is mentioned,
+                                i.e.
+                                Surname, Name and
+                                Father’s name in Bracket?
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule21" id="rule21"
+                                {% if filing.checklist_21 %} checked {% endif %} disabled>
+                            <label class="form-check-label" for="rule21">
+                                Sr. No. 21: Copy served to the other side / Caveator / P.P.
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule25" id="rule25"
+                                {% if filing.checklist_25%} checked {% endif %} disabled>
+                            <label class="form-check-label" for="rule25">
+                                Sr. No. 25: A statement is made about earlier litigation relating to this matter
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule31" id="rule31"
+                                {% if filing.checklist_31 %} checked {% endif %} disabled>
+                            <label class="form-check-label" for="rule31">
+                                Sr. No. 31: No blanks in Memo
+                            </label>
+                        </div>
+                    </div>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<h1>This page is for office use only!</h1>
+{% endif %}
+
+{% endblock %}

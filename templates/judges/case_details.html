@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if is_judge %}
+
+<!-- Navbar  -->
+{% include 'partials/_navbar-judge.html' %}
+
+<!--Alerts included here -->
+{% include 'partials/_alerts.html' %}
+
+<!-- Main Content Start -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-1 col-sm-12">
+            <p>
+                <b>Matter type: </b><br>
+                {{case.filing.matter_type}}
+            </p>
+        </div>
+        <div class="col-md-2 col-sm-12">
+            <p>
+                <b>Case number: </b><br>
+                <mark style="background-color: yellow;"><span style="color: black;">{{case.case_type}}/{{case.case_number}}/{{case.case_year}}</span></mark>
+            </p>
+        </div>
+        <div class="col-md-2 col-sm-12">
+            <p>
+                <b>Bench type: </b><br>
+                {% if case.bench_type == 'S.J.' %}
+                    Single Judge
+                {% else %}
+                    Division Bench
+                {% endif %}
+            </p>
+        </div>
+        <div class="col-md-2 col-sm-12">
+            <p>
+                <b>Connected matter: </b>
+                {% if filing.connected_case %}
+                    <mark><b style="color: red;">{{case.filing.connected_case_type}}/{{case.filing.connected_case_number}}/{{case.filing.connected_case_year}}</b></mark>
+                {% else %}
+                <span class="notConnected">No</span>
+                {% endif %}
+            </p>
+        </div>
+        <div class="col-md-3 col-sm-12">
+            <p>
+                <b>Act/Provision/Rules: </b><br>
+                {{case.filing.rules}}
+            </p>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-5 col-sm-12">
+            <h3><u>Petitioner</u></h3>
+            <div class="row">
+                <div class="col-12">
+                    <p>
+                        <b>Filed on: </b><br>
+                        {{ case.filing.filing_time}}
+                    </p>
+                </div>
+                <br>
+                <div class="col-12 row">
+                    <p class="col-md-4 col-sm-12">
+                        <b>Petitioner Advocate: </b><br>
+                        {{ case.filing.advocate_hc_code}} - {{ case.filing.filing_advocate.first_name }} {{ case.filing.filing_advocate.last_name }}
+                    </p>
+                    <p class="col-md-4 col-sm-12">
+                        <b>Vakalatnama: </b><br>
+                        <a href="{{case.filing.vnamFile.url}}" target="_blank">Vakalatnama</a>
+                    </p>
+                </div>
+                <br>
+                <br>
+                <div class="col-12">
+                    <p>
+                        <b>Urgency: </b>
+                        {% if case.filing.filing_urgency %}
+                        <a href="{{case.filing.urgencyFile.url}}" target="_blank">Yes</a>
+                        {% else %}
+                        <span class="noUrgency">No</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <br>
+                <div class="col-12">
+                    <p>
+                        <b>1. Index: </b>
+                        <a href="{{case.filing.indexFile.url}}" target="_blank">[PDF] file</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>2. List of events: </b>
+                        <a href="{{case.filing.LoEventsFile.url}}" target="_blank">[PDF] file</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>3. Synopsis: </b>
+                        <a href="{{case.filing.synopsisFile.url}}" target="_blank">[PDF] file</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>4. Memo of Petition/ Application/ Appeal with Affidavit: </b>
+                        <a href="{{case.filing.memoFile.url}}" target="_blank">[PDF] file</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>5. Impunged Order/ Judgement/ FIR/ Chargesheet: </b>
+                        <a href="{{case.filing.pastFile.url}}" target="_blank">[PDF] file</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>6. Annextures: </b>
+                        <a href="{{case.filing.annexFile.url}}" target="_blank">[PDF] file</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>7. Other files: </b>
+                        {% if case.filing.othFile %}
+                        <span class="others"><a href="{{case.filing.othFile.url}}" target="_blank">[PDF] file</a>
+                        {% else %}
+                        <span class="noOther">N.A.</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <br>
+            </div>
+        </div>
+        <div class="col-md-5 col-sm-12">
+            <h3><u>Respondents</u></h3>
+            {% if responses %}
+                {% for response in responses %}
+                    <div class="row">
+                        <h5><u>Filing - {{forloop.counter}}</u></h5>
+                        <br>
+                        <div class="col-12 row">
+                            <p class="col-md-4 col-sm-12">
+                                <b>Filed by: </b><br>
+                                {{ response.advocate_hc_code}} - {{ response.responding_advocate.first_name }} {{ response.responding_advocate.last_name }}
+                            </p>
+                            <p class="col-md-4 col-sm-12">
+                                <b>Vakalatnama: </b><br>
+                                <a href="{{response.vnamFile.url}}" target="_blank">Vakalatnama</a>
+                            </p>
+                            <p class="col-md-4 col-sm-12">
+                                <b>Filed on: </b><br>
+                                <span>{{response.response_time}}</span>
+                            </p>
+                        </div>
+                        <div class="col-12">
+                            <p>
+                                <b>1. Affidavit in Reply: </b>
+                                {% if 'False' in response.affidavit_in_response.url %}
+                                <span class="noOther">N.A.</span>
+                                {% else %}
+                                <span class="others"><a href="{{response.affidavit_in_response.url}}" target="_blank">[PDF] file</a>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-12">
+                            <p>
+                                <b>2. Further affidavit in reply: </b>
+                                {% if 'False' in response.further_affidavit.url %}
+                                <span class="noOther">N.A.</span>
+                                {% else %}
+                                <span class="others"><a href="{{response.further_affidavit.url}}" target="_blank">[PDF] file</a>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-12">
+                            <p>
+                                <b>3. Other Files: </b>
+                                {% if 'False' in response.othFile.url %}
+                                <span class="noOther">N.A.</span>
+                                {% else %}
+                                <span class="others"><a href="{{response.othFile.url}}" target="_blank">[PDF] file</a>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-12">
+                            <p>
+                                <b>Advocate's note: </b>
+                                <p>{{response.response_note}}</p>
+                            </p>
+                        </div>
+                        <br>
+                    </div>
+                {% endfor %}                
+            {% else %}
+            <p>No response filed</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% else %}
+<h1>This page is for judges only!</h1>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,377 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if is_officer %}
+
+<!-- Navbar  -->
+{% include 'partials/_navbar-officer.html' %}
+
+<!--Alerts included here -->
+{% include 'partials/_alerts.html' %}
+
+<!-- Main Content Start -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-md-4 col-sm-12">
+                    <p>
+                        <b>Matter type: </b>
+                        {{filing.matter_type}}
+                    </p>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <p>
+                        <b>Case type: </b>
+                        {{filing.case_type}}
+                    </p>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <p>
+                        <b>Bench type: </b>
+                        {{filing.bench_type}}
+                    </p>
+                </div>
+                <br>
+                <div class="col-12 row">
+                    <p class="col-md-4 col-sm-12">
+                        <b>Act/Provision/Rules: </b>
+                        {{filing.rules}}
+                    </p>
+                    <p class="col-md-4 col-sm-12">
+                        <b>Filed by: </b>
+                        {{ filing.advocate_hc_code}} - {{ filing.filing_advocate.first_name }} {{ filing.filing_advocate.last_name }}
+                    </p>
+                    <div class="col-md-4 col-sm-12">
+                        <b>Sanat Number: </b><br>
+                        <span>{{filing.sanat_number}}</span>
+                        <span style="font-size: small; color: green;"><br><p>Sanat number is not required in party-in-person ('PIP') application.</p></span>
+                    </div>
+                    <p class="col-md-4 col-sm-12">
+                        <b>Vakalatnama: </b>
+                        <a href="{{filing.vnamFile.url}}" target="_blank">Vakalatnama</a>
+                    </p>
+                </div>
+                <br>
+                <div class="col-12">
+                    <p>
+                        <b>Connected matter: </b>
+                        {% if filing.connected_case %}
+                            {% if filing.connected_case.string is false %}
+                            <span class="notConnected">No</span>
+                            {% else %}
+                            <mark><b style="color: red;">{{filing.connected_case_type}}/{{filing.connected_case_number}}/{{filing.connected_case_year}}</b></mark>
+                            {% endif %}
+                        {% else %}
+                        <span class="notConnected">No</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <br>
+                <div class="col-12">
+                    <p>
+                        <b>Urgency: </b>
+                        {% if filing.filing_urgency %}
+                        <a href="{{filing.urgencyFile.url}}" style="color: red;" target="_blank">Yes [Urgency Note here]</a>
+                        {% else %}
+                        <span class="noUrgency">No</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <br>
+                <div class="col-12">
+                    <p>
+                        <b>1. Index: </b>
+                        <a href="{{filing.indexFile.url}}" target="_blank">Index [PDF]</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>2. List of events: </b>
+                        <a href="{{filing.LoEventsFile.url}}" target="_blank">Event List [PDF]</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>3. Synopsis: </b>
+                        <a href="{{filing.synopsisFile.url}}" target="_blank">Synopsis [PDF]</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>4. Memo of Petetion/ Application/ Appeal with Affidavit: </b>
+                        <a href="{{filing.memoFile.url}}" target="_blank">Memo and Affidivit [PDF]</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>5. Impunged Order/ Judgement/ FIR/ Chargesheet: </b>
+                        <a href="{{filing.pastFile.url}}" target="_blank">Files [PDF]</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>6. Annextures: </b>
+                        {% if 'False' in filing.annexFile.url %}
+                            <span>No</span>
+                        {% else%}
+                            <a href="{{filing.annexFile.url}}" target="_blank">Annextures [PDF]</a>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>7. Other files: </b>
+                        <span class="others">
+                            {% if 'False' in filing.othFile.url %}
+                                <span>No</span>
+                            {% else%}
+                                <a href="{{filing.othFile.url}}" target="_blank">Other files pdf</a>
+                            {% endif %}
+                        </span>
+                    </p>
+                </div>
+                <br>
+                <form action="{% url 'assign_case' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="filing_id" value="{{filing.id}}">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <u>
+                                <h3>Checklist</h3>
+                            </u>
+                        </div>
+                        <div class="col-sm-12">
+                            <p>Check if improper as per checklist per Rule 32-A</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule8" id="rule8"
+                                {% if filing.checklist_8 %} checked {% endif %}>
+                            <label class="form-check-label" for="rule8">
+                                Sr. No. 8: Memo of Petition / Appeal is signed
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule9" id="rule9"
+                                {% if filing.checklist_9 %} checked {% endif %}>
+                            <label class="form-check-label" for="rule9">
+                                Sr. No. 9: Duly signed and affirmed Affidavit in Support is filed
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule10" id="rule10"
+                                {% if filing.checklist_10 %} checked {% endif %}>
+                            <label class="form-check-label" for="rule10">
+                                Sr. No. 10: Vakalatnama signed by all Petitioners / Appellants & accepted by Advocate,
+                                filed
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule11" id="rule11"
+                                {% if filing.checklist_11 %} checked {% endif %}>
+                            <label class="form-check-label" for="rule11">
+                                Sr. No. 11: The Provisions of Law under which the matter is filed, is stated
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule15" id="rule15"
+                                {% if filing.checklist_15 %} checked {% endif %}>
+                            <label class="form-check-label" for="rule15">
+                                Sr. No. 15: Whether Certified Copies of following filed ?
+                                Appellate Judgment, Appellate Decree, Appeal Memo,
+                                Trail Court Judgment, Trail Court Decree, Bill of Costs
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule16" id="rule16"
+                                {% if filing.checklist_16 %} checked {% endif %}>
+                            <label class="form-check-label" for="rule16">
+                                Sr. No. 16: Names of the parties tally with names in the Certified Copies
+                                <b>(Office NOT to raise Objection No. 13 - If the victim avails of the Right to Appeal
+                                    provided
+                                    under Sec. 372 of
+                                    Cr.P.C.)</b>
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule17" id="rule17"
+                                {% if filing.checklist_17 %} checked {% endif %}>
+                            <label class="form-check-label" for="rule17">
+                                Sr. No. 17: Names, Designations, Full Address, Age, Sex, Mobile Number, E-mail address
+                                of
+                                all
+                                parties are given and in
+                                case, if name is shown in initials i.e. J.K. Patel, whether the full name is mentioned,
+                                i.e.
+                                Surname, Name and
+                                Father’s name in Bracket?
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule21" id="rule21"
+                                {% if filing.checklist_21 %} checked {% endif %}>
+                            <label class="form-check-label" for="rule21">
+                                Sr. No. 21: Copy served to the other side / Caveator / P.P.
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule25" id="rule25"
+                                {% if filing.checklist_25%} checked {% endif %}>
+                            <label class="form-check-label" for="rule25">
+                                Sr. No. 25: A statement is made about earlier litigation relating to this matter
+                            </label>
+                        </div>
+                        <div class="form-check col-12">
+                            <input class="form-check-input" type="checkbox" name="rule31" id="rule31"
+                                {% if filing.checklist_31 %} checked {% endif %}>
+                            <label class="form-check-label" for="rule31">
+                                Sr. No. 31: No blanks in Memo
+                            </label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group col-12" id="assign">
+                        <label for="assign">Assign Case Number</label>
+                        <span>Use for approved cases to assign case numbers</span>
+                        <div class="row">
+                            <div class="form-group col-md-3 col-sm-12">
+                                <select name="finalCT" class="form-control" id="finalCT">
+                                    <option value="select" disabled>Case type</option>
+                                    <optgroup label="-------CIVIL-------">
+                                        <option value="AO">AO-APPEAL FROM ORDER</option>
+                                        <option value="CA">CA-CIVIL APPLICATION</option>
+                                        <option value="CR">CR-CIVIL REFERENCES</option>
+                                        <option value="CRA">CRA-CIVIL REVISION APPLICATION</option>
+                                        <option value="FA">FA-FIRST APPEAL</option>
+                                        <option value="LPA">LPA-LETTERS PATENT APPEAL</option>
+                                        <option value="MCA">MCA-MISC. CIVIL APPLICATION</option>
+                                        <option value="MCACP">MCACP-MISC. CIVIL APPLN. (CONTEMPT PETITION)</option>
+                                        <option value="SA">SA-SECOND APPEAL</option>
+                                        <option value="SCA">SCA-SPECIAL CIVIL APPLICATION</option>
+                                        <option value="X-OBJ">X-OBJ-CROSS OBJECTION</option>
+                                        <option value="WPPIL">WPPIL-WRIT PETITION (PIL)</option>
+                                        <option value="CPTA">CPTA-APPEAL IN CONTEMPT PROCEEDINGS</option>
+                                        <option value="AS">AS-ADMIRALITY SUIT</option>
+                                        <option value="CAR">CAR-CHARTERED ACCOUNTANT REFERENCE</option>
+                                        <option value="CECGA">CECGA-CENTRAL EXCISE &amp; CUSTOMS GOLD CONTROL
+                                            APPLICATION
+                                        </option>
+                                        <option value="CECGR">CECGR-CE-CUSTOMS GOLD CONTROLL REFERENCE</option>
+                                        <option value="CMP">CMP-PTN. UNDER CHRISTIAN MARRIAGE ACT</option>
+                                        <option value="COMA">COMA-COMPANY APPLICATION</option>
+                                        <option value="COMP">COMP-COMPANY PETITION</option>
+                                        <option value="CS">CS-CIVIL SUITS</option>
+                                        <option value="EA">EA-ELECTION APPLICATION</option>
+                                        <option value="EDA">EDA-ESTATE DUTY APPLICATION</option>
+                                        <option value="EDR">EDR-ESTATE DUTY REFERENCE</option>
+                                        <option value="EP">EP-ELECTION PETITION</option>
+                                        <option value="EXTA">EXTA-EXPENDITURE TAX APPLICATION</option>
+                                        <option value="EXTR">EXTR-EXPENDITURE TAX REFERENCE</option>
+                                        <option value="GTA">GTA-GIFT TAX APPLICATION</option>
+                                        <option value="GTR">GTR-GIFT TAX REFERENCE</option>
+                                        <option value="IAAP">IAAP-PETN. UNDER ARBITRATION ACT</option>
+                                        <option value="ITA">ITA-INCOME TAX APPLICATION</option>
+                                        <option value="ITR">ITR-INCOME TAX REFERENCE</option>
+                                        <option value="OJ109">OJ109-APPEAL UNDER SECTION 109</option>
+                                        <option value="OJA">OJA-O.J.APPEAL</option>
+                                        <option value="OJCAN">OJCAN-CANCELLATION APPLICATION</option>
+                                        <option value="OJCR">OJCR-CRIMINAL CASE</option>
+                                        <option value="OJMP">OJMP-MISC. PETITION</option>
+                                        <option value="OJRP">OJRP-REVIEW PETITION</option>
+                                        <option value="OLR">OLR-OFFICIAL LIQUDATOR REPORT</option>
+                                        <option value="RA">RA-RECTIFICATION APPLICATION</option>
+                                        <option value="RP">RP-REVOCATION PETITION</option>
+                                        <option value="SJC">SJC-SPECIAL JURISDICTION CASES</option>
+                                        <option value="SPTA">SPTA-SUPER PROFIT TAX APPLICATION</option>
+                                        <option value="SPTR">SPTR-SUPER PROFIT TAX REFERENCE</option>
+                                        <option value="SR">SR-STAMP REFERENCE</option>
+                                        <option value="ST(OJ)">ST(OJ)-ST(OJ)</option>
+                                        <option value="STA">STA-SALES TAX APPLICATION</option>
+                                        <option value="STR">STR-SALES TAX REFERENCE</option>
+                                        <option value="SUTA">SUTA-SUR TAX APPLICATION</option>
+                                        <option value="SUTR">SUTR-SUR TAX REFERENCE</option>
+                                        <option value="TAXAP">TAXAP-TAX APPEAL</option>
+                                        <option value="TEP">TEP-TESTAMENTARY PETITION</option>
+                                        <option value="WTA">WTA-WEALTH TAX APPLICATION</option>
+                                        <option value="WTR">WTR-WEALTH TAX REFERENCE</option>
+                                        <option value="X-OBJ(O)">X-OBJ(O)-CROSS OBJECTION </option>
+                                    </optgroup>
+                                    <optgroup label="-------CRIMINAL-------">
+                                        <option value="CC">CC-CRIMINAL CONFIRMATION CASE</option>
+                                        <option value="CCASE">CCASE-CRIMINAL CASE</option>
+                                        <option value="CR.A">CR.A-CRIMINAL APPEAL</option>
+                                        <option value="CR.MA">CR.MA-CRIMINAL MISC.APPLICATION</option>
+                                        <option value="CR.RA">CR.RA-CRIMINAL REVISION APPLICATION</option>
+                                        <option value="CRREF">CRREF-CRIMINAL REFERENCE</option>
+                                        <option value="SCR.A">SCR.A-SPECIAL CRIMINAL APPLICATION</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12">
+                                <input type="number" name="finalCNo" id="finalCNo" class="form-control"
+                                    placeholder="Case Number">
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12">
+                                <input type="number" name="finalCYr" id="finalCYr" class="form-control"
+                                    value="2020" placeholder="Case Year">
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12">
+                                <select class="form-control" id="BenchFinal" name="BenchFinal" >
+                                    <option value="select" disabled>Select</option>
+                                    <optgroup label="Bench Type">
+                                    <option value="S.J.">Single Judge (S.J.)</option>
+                                    <option value="D.B.">Division Bench (D.B.)</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <textarea type="text" name="remarks" id="remarks"
+                                placeholder="Comments/Remarks/Office Objections" style="width: 1000px;"></textarea>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-3">
+                            <div class="form-check form-check">
+                                <input class="form-check-input" type="radio" name="caseChoiceRadio" id="Contd"
+                                    value="True">
+                                <label class="form-check-label" for="Contd" style="color: blue; 
+                                font-weight: bold; font-size: 30px;">Accept</label>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="caseChoiceRadio"
+                                    id="nContd" value="False">
+                                    <label class="form-check-label" for="Contd" style="color: red; 
+                                    font-weight: bold; font-size: 30px;">Decline</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-5"></div>
+                        <input class="btn btn-primary" type="submit" value="Submit">
+                    </div>
+                </form>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<h1>This page is for office use only!</h1>
+{% endif %}
+
+{% endblock %}

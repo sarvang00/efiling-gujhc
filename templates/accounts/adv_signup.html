@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <!-- Navbar start -->
+    <nav id="navbar-example2" class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#"><img src="{% static 'images/icon.png'%}" alt="High Court Logo" style="width: 5%;">
+            <b style="color: #47b;">High Court of Gujarat</b></a>
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" href="#reg" style="color: #333; font-weight: bold;">Lawyer Registration</a>
+            </li>
+        </ul>
+    </nav>
+    <!-- navbar end -->
+
+
+    <!-- Main Content Start -->
+    <div class="container">
+    <!--Alerts included here -->
+        {% include 'partials/_alerts.html' %}
+        <h4><u><b>Advocate Registration for E-Case Filing</b></u></h4>
+        <form action="{% url 'register_lawyer' %}" method="POST">
+        {% csrf_token %}
+            <div class="form-group">
+               <div class="row">
+                    <div class="form-group col-md-4 col-sm-12">
+                      <label for="first_name">First Name</label>
+                      <input type="text" name="first_name" class="form-control" placeholder="First Name (Eg.: John)" required>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                      <label for="last_name">Last Name</label>
+                      <input type="text" name="last_name" class="form-control" placeholder="First Name (Eg.: Doe)" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4 col-sm-12">
+                      <label for="email">Email</label>
+                      <input type="email" name="email" class="form-control" placeholder="Email ID (Eg.: abc@provider.com)" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4 col-sm-12">
+                      <label for="username">Username</label>
+                      <input type="text" name="username" class="form-control" placeholder="Username (Eg: flyingFalcon007)" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4 col-sm-12">
+                      <label for="password2">Password</label>
+                      <input type="password" name="password" class="form-control" placeholder="Your password" required>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                      <label for="password">Confirm Password</label>
+                      <input type="password" name="password2" class="form-control" placeholder="Your password"required>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-12">
+                        <b><u>Following are terms for using this account:</u></b>
+                        <ol>
+                            <li>I shall pay the court fees once the normal functioning of the court resumes.</li>
+                            <li>Original documents must be submitted to the Honourable Court once the normal functioning
+                                of court resumes, including the court order.</li>
+                            <li>All the uploaded documents shall be legible.</li>
+                            <li>All the pages shall be necessarily signed and attested.</li>
+                            <li>I shall provide the original copy of FIR as well as Type-copy of the same.</li>
+                            <li>The application for urgency, if uploaded, shall be on my (the Lawyer's) letterpad
+                                alongwith the my signature.</li>
+                            <li>I undestand that if any document which is uploaded is found to be falsified, then it
+                                shall fully be the responsibilty of the concerned Advocate.</li>
+                            <li>I shall follow the Rules and Regulations of the High Court of Gujarat.</li>
+                        </ol>
+                        <input type="radio" name="agreement" id="AgreeRadio"> I understand the above terms and agree.
+                    </div>
+                </div>
+                <br>
+                <input id="register-adv" type="submit" value="Register" class="btn btn-secondary btn-block"  style="background-color: #333; color: white; font-weight: bold; border-radius: 10px;" disabled>
+            </div>
+        </form>
+        <div style="margin-bottom: 100px;"></div>
+    </div>
+
+    <script>
+        $("input:radio").change(function () {$("#register-adv").prop("disabled", false);});
+    </script>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if is_judge %}
+
+<!-- Navbar  -->
+{% include 'partials/_navbar-judge.html' %}
+
+<!--Alerts included here -->
+{% include 'partials/_alerts.html' %}
+
+<!-- Main Content Start -->
+<div class="container-fluid">
+    <br>
+    {% if cases %}
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <div class="table-responsive">
+                <table id="filing-table" class="table table-striped table-bordered table-hover table-fw-widget" style="text-align: center;">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Matter Type</th>
+                            <th scope="col">Case No.</th>
+                            <th scope="col">Urgency</th>
+                            <th scope="col">Bench Type</th>
+                            <th scope="col">Petetioner Advocate</th>
+                            <th scope="col">Respondent Advocate</th>
+                            <th scope="col">View details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for case in cases %}
+                        <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{ case.filing.matter_type }}</td>
+                            <td>{{case.case_type}}/{{case.case_number}}/{{case.case_year}}</td>
+                            <td>
+                                {% if case.filing.filing_urgency == True %}
+                                  <span style="color: red;">Yes</span>
+                                {% else %}
+                                  <span style="color: black;">No</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if case.bench_type == 'S.J.' %}
+                                    Single Judge
+                                {% else %}
+                                    Division Bench
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ case.filing.filing_advocate.first_name }} {{ case.filing.filing_advocate.last_name }}
+                            </td>
+                            <td>
+                                {% if case.responding_advocate %}
+                                {{ case.filing.filing_advocate.first_name }} {{ case.filing.filing_advocate.last_name }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'view_case' case.id %}">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-4">
+        </div>
+        <div class="col-4" style="text-align: center;">
+            No e-filing done till date.
+        </div>
+    </div>
+    <br>
+    {% endif %}
+</div>
+{%else%}
+<h1>This is a judges only page!</h1>
+{%endif%}
+
+<script>
+    $(document).ready(function () {
+        $('#filing-table').dataTable({
+            "searching": true,
+            "paging": true,
+            "ordering": true
+        });
+    });
+</script>
+
+{% endblock %}

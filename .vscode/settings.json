@@ -1,0 +1,7 @@
+{
+    "python.pythonPath": "C:\\Users\\Sarva\\anaconda3\\envs\\web_env\\python.exe",
+    "python.linting.pylintEnabled": false,
+    "python.linting.enabled": true,
+    "python.linting.banditEnabled": true,
+    "python.linting.flake8Enabled": false
+}

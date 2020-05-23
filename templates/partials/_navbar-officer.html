@@ -1,0 +1,51 @@
+{% load static %}
+
+<!-- navbar start -->
+<nav id="navbar-example2" class="navbar navbar-expand navbar-light bg-light">
+    <a class="navbar-brand" href="#" style="width: min-content;"><img src="{% static 'images/icon.png' %}" alt="High Court Logo"
+            style="height: 50px;"><b style="color: #47b;">High Court of Gujarat</b></a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li 
+                {% if 'office_dashboard' in request.path %}
+                    class="nav-item active"
+                {% else %}
+                    class="nav-item"
+                {% endif %}
+            >
+                <a class="nav-link" href="{% url 'office_dashboard' %}">Petetioner Allotment Pending List</a>
+            </li>
+            <li 
+                {% if 'response_approval_list' in request.path %}
+                    class="nav-item active"
+                {% else %}
+                    class="nav-item"
+                {% endif %}
+            >
+                <a class="nav-link" href="{% url 'response_approval_list' %}">Reply Approval Pending List</a>
+            </li>
+            <li 
+                {% if 'office_history' in request.path %}
+                    class="nav-item active"
+                {% else %}
+                    class="nav-item"
+                {% endif %}
+            >
+                <a class="nav-link" href="{% url 'office_history' %}">Acceptance/Rejection History</a>
+            </li>
+        </ul>
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" href="#reg" style="color: #333; font-weight: bold;">{{user.first_name}} {{user.last_name}}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="javascript:{document.getElementById('logout').submit()}" style="color: red; font-weight: bold;"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            <form action="{% url 'logout' %}" method="post" id="logout">
+                {% csrf_token %}
+                <input type="hidden">
+            </form>
+        </li>
+    </ul>
+    </div>
+</nav>
+<!-- navbar end -->

@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if is_advocate %}
+
+<!-- Navbar  -->
+{% include 'partials/_navbar-lawyer.html' %}
+
+<!--Alerts included here -->
+{% include 'partials/_alerts.html' %}
+
+<!-- Main content -->
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h3 style="color: red;">Please make sure to ensure correct case details. Registry shall not be liable for your mistakes.</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <form action="{% url 'file_response' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="SanatNo">Sanat Number</label>
+                        <input type="text" name="SanatNo" id="SanatNo" class="form-control"
+                            placeholder="Eg: G/1234/2020" required>
+                        <span style="font-size: small; color: red;"><br><p>If filed by party-in-person, enter 'PIP'. Also, it is mandatory for you to obtain competency certificate in that case, prior to its hearing by the Hon'ble Court.</p></span>
+                    </div>
+                    <div class="form-group col-md-4 col-sm-12">
+                        <label for="advocate_hc_code">Advocate High Court Code</label><br>
+                        <input type="number" name="advocate_hc_code" id="advocate_hc_code" class="form-control" placeholder="Advocate HC Code (Eg: 0001)" required>
+                    </div>
+                </div>
+                <div class="row">
+                <div class="form-group col-12" id="resp">
+                    <label for="resp">Respond to matter</label>
+                    <div class="row">
+                        <div class="form-group col-md-4 col-sm-12">
+                            <select class="form-control" id="CaseType" name="casetype" required>
+                                <option value="select" disabled>Case type</option>
+                                <optgroup label="-------CIVIL-------">
+                                    <option value="AO">AO-APPEAL FROM ORDER</option>
+                                    <option value="CA">CA-CIVIL APPLICATION</option>
+                                    <option value="CR">CR-CIVIL REFERENCES</option>
+                                    <option value="CRA">CRA-CIVIL REVISION APPLICATION</option>
+                                    <option value="FA">FA-FIRST APPEAL</option>
+                                    <option value="LPA">LPA-LETTERS PATENT APPEAL</option>
+                                    <option value="MCA">MCA-MISC. CIVIL APPLICATION</option>
+                                    <option value="MCACP">MCACP-MISC. CIVIL APPLN. (CONTEMPT PETITION)</option>
+                                    <option value="SA">SA-SECOND APPEAL</option>
+                                    <option value="SCA">SCA-SPECIAL CIVIL APPLICATION</option>
+                                    <option value="X-OBJ">X-OBJ-CROSS OBJECTION</option>
+                                    <option value="WPPIL">WPPIL-WRIT PETITION (PIL)</option>
+                                    <option value="CPTA">CPTA-APPEAL IN CONTEMPT PROCEEDINGS</option>
+                                    <option value="AS">AS-ADMIRALITY SUIT</option>
+                                    <option value="CAR">CAR-CHARTERED ACCOUNTANT REFERENCE</option>
+                                    <option value="CECGA">CECGA-CENTRAL EXCISE &amp; CUSTOMS GOLD CONTROL APPLICATION
+                                    </option>
+                                    <option value="CECGR">CECGR-CE-CUSTOMS GOLD CONTROLL REFERENCE</option>
+                                    <option value="CMP">CMP-PTN. UNDER CHRISTIAN MARRIAGE ACT</option>
+                                    <option value="COMA">COMA-COMPANY APPLICATION</option>
+                                    <option value="COMP">COMP-COMPANY PETITION</option>
+                                    <option value="CS">CS-CIVIL SUITS</option>
+                                    <option value="EA">EA-ELECTION APPLICATION</option>
+                                    <option value="EDA">EDA-ESTATE DUTY APPLICATION</option>
+                                    <option value="EDR">EDR-ESTATE DUTY REFERENCE</option>
+                                    <option value="EP">EP-ELECTION PETITION</option>
+                                    <option value="EXTA">EXTA-EXPENDITURE TAX APPLICATION</option>
+                                    <option value="EXTR">EXTR-EXPENDITURE TAX REFERENCE</option>
+                                    <option value="GTA">GTA-GIFT TAX APPLICATION</option>
+                                    <option value="GTR">GTR-GIFT TAX REFERENCE</option>
+                                    <option value="IAAP">IAAP-PETN. UNDER ARBITRATION ACT</option>
+                                    <option value="ITA">ITA-INCOME TAX APPLICATION</option>
+                                    <option value="ITR">ITR-INCOME TAX REFERENCE</option>
+                                    <option value="OJ109">OJ109-APPEAL UNDER SECTION 109</option>
+                                    <option value="OJA">OJA-O.J.APPEAL</option>
+                                    <option value="OJCAN">OJCAN-CANCELLATION APPLICATION</option>
+                                    <option value="OJCR">OJCR-CRIMINAL CASE</option>
+                                    <option value="OJMP">OJMP-MISC. PETITION</option>
+                                    <option value="OJRP">OJRP-REVIEW PETITION</option>
+                                    <option value="OLR">OLR-OFFICIAL LIQUDATOR REPORT</option>
+                                    <option value="RA">RA-RECTIFICATION APPLICATION</option>
+                                    <option value="RP">RP-REVOCATION PETITION</option>
+                                    <option value="SJC">SJC-SPECIAL JURISDICTION CASES</option>
+                                    <option value="SPTA">SPTA-SUPER PROFIT TAX APPLICATION</option>
+                                    <option value="SPTR">SPTR-SUPER PROFIT TAX REFERENCE</option>
+                                    <option value="SR">SR-STAMP REFERENCE</option>
+                                    <option value="ST(OJ)">ST(OJ)-ST(OJ)</option>
+                                    <option value="STA">STA-SALES TAX APPLICATION</option>
+                                    <option value="STR">STR-SALES TAX REFERENCE</option>
+                                    <option value="SUTA">SUTA-SUR TAX APPLICATION</option>
+                                    <option value="SUTR">SUTR-SUR TAX REFERENCE</option>
+                                    <option value="TAXAP">TAXAP-TAX APPEAL</option>
+                                    <option value="TEP">TEP-TESTAMENTARY PETITION</option>
+                                    <option value="WTA">WTA-WEALTH TAX APPLICATION</option>
+                                    <option value="WTR">WTR-WEALTH TAX REFERENCE</option>
+                                    <option value="X-OBJ(O)">X-OBJ(O)-CROSS OBJECTION </option>
+                                </optgroup>
+                                <optgroup label="-------CRIMINAL-------">
+                                    <option value="CC">CC-CRIMINAL CONFIRMATION CASE</option>
+                                    <option value="CCASE">CCASE-CRIMINAL CASE</option>
+                                    <option value="CR.A">CR.A-CRIMINAL APPEAL</option>
+                                    <option value="CR.MA">CR.MA-CRIMINAL MISC.APPLICATION</option>
+                                    <option value="CR.RA">CR.RA-CRIMINAL REVISION APPLICATION</option>
+                                    <option value="CRREF">CRREF-CRIMINAL REFERENCE</option>
+                                    <option value="SCR.A">SCR.A-SPECIAL CRIMINAL APPLICATION</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-12">
+                            <input type="number" name="ccno" id="ccno" class="form-control" placeholder="Case Number" required>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-12">
+                            <input type="number" name="ccyr" id="ccyr" class="form-control" placeholder="Case Year" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12 col-sm-12">
+                        <b>
+                            <label for="ruled_matter">Is matter ruled/admitted?(check the box if ruled or admitted)</label>
+                            <input type="checkbox" name="ruled_matter" id="ruled_matter">
+                        </b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group col-12" id="affi_in_resp">
+                            <label for="vakalatnama">Vakalatnama</label>
+                            <input type="file" class="form-control-file" id="vakalatnama" name="vakalatnama" accept=".pdf" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group col-12" id="affi_in_resp">
+                            <label for="affi_in_resp">Affidavit in Reply</label>
+                            <input type="file" class="form-control-file" id="responseFile" name="responseFile" accept=".pdf">
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group col-12" id="affi_in_resp">
+                            <label for="furtherResponseFile">Further Affidavit in Reply</label><br>
+                            <input type="file" class="form-control-file" id="furtherResponseFile" name="furtherResponseFile" accept=".pdf">
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group col-12" id="affi_in_resp">
+                            <label for="otherFiles">Others</label><br>
+                            <input type="file" class="form-control-file" id="otherFiles" name="otherFiles" accept=".pdf">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-12"  style="align-items: center; text-align: center;">
+                        <textarea type="text" name="note" id="note" placeholder="Note (Eg: For Respondent Nos. 1-5)"
+                                style="width: 1000px;"></textarea>
+                    </div>
+                </div>
+                <br>
+                <div class="col-12" style="align-items: center; text-align: center;">
+                    <input type="submit" value="Submit" style="background-color: #06c; color: white; font-weight: bold; font-size: 15px; border-radius: 5px;">
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{%else%}
+<h1>This is an advocates only page!</h1>
+{%endif%}
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% load static %}
+
+<!-- navbar start -->
+<nav id="navbar-example2" class="navbar navbar-expand navbar-light bg-light">
+    <a class="navbar-brand" href="#" style="width: min-content;"><img src="{% static 'images/icon.png' %}" alt="High Court Logo"
+            style="height: 50px;"><b style="color: #47b;">High Court of Gujarat</b></a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li 
+                {% if 'dashboard' in request.path %}
+                    class="nav-item active"
+                {% else %}
+                    class="nav-item"
+                {% endif %}
+            >
+                <a class="nav-link" href="{% url 'judge_dashboard' %}">Find Case Details</a>
+            </li>
+            <li 
+                {% if 'all_cases' in request.path %}
+                    class="nav-item active"
+                {% else %}
+                    class="nav-item"
+                {% endif %}
+            >
+                <a class="nav-link" href="{% url 'all_cases' %}">All cases</a>
+            </li>
+        </ul>
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" href="#reg" style="color: #333; font-weight: bold;">Hon'ble Justice {{user.first_name}} {{user.last_name}}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="javascript:{document.getElementById('logout').submit()}" style="color: red; font-weight: bold;"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            <form action="{% url 'logout' %}" method="post" id="logout">
+                {% csrf_token %}
+                <input type="hidden">
+            </form>
+        </li>
+    </ul>
+    </div>
+</nav>
+<!-- navbar end -->

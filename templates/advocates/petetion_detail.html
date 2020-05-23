@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if is_advocate %}
+
+<!-- Navbar  -->
+{% include 'partials/_navbar-lawyer.html' %}
+
+<!--Alerts included here -->
+{% include 'partials/_alerts.html' %}
+
+<!-- Main Content Start -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-4">
+                    <p>
+                        <b>Filed by:</b><br>
+                        <span>{{filing.advocate_hc_code}} - {{filing.filing_advocate.first_name}} {{filing.filing_advocate.last_name}}</span>
+                    </p>
+                </div>
+                <div class="col-4">
+                    <b>Sanat Number: </b><br>
+                    <span>{{filing.sanat_number}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-sm-12">
+                    <p>
+                        <b>Matter type: </b>
+                        {{filing.matter_type}}
+                    </p>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <p>
+                        <b>Case type: </b>
+                        {{filing.case_type}}
+                    </p>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <p>
+                        <b>Bench type: </b>
+                        {{filing.bench_type}}
+                    </p>
+                </div>
+                <br>
+                <div class="col-12 row">
+                    <p class="col-md-4 col-sm-12">
+                        <b>Act/Provision/Rules: </b>
+                        {{filing.rules}}
+                    </p>
+                    <p class="col-md-4 col-sm-12">
+                        <b>Vakalatnama: </b>
+                        <a href="{{filing.vnamFile.url}}">Vakalatnama</a>
+                    </p>
+                </div>
+                <br>
+                <div class="col-12">
+                    <p>
+                        <b>Connected matter: </b>
+                        {% if filing.connected_case %}
+                            <mark><b style="color: red;">{{filing.connected_case_type}}/{{filing.connected_case_number}}/{{filing.connected_case_year}}</b></mark>
+                        {% else %}
+                        <span class="notConnected">No</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <br>
+                <div class="col-12">
+                    <p>
+                        <b>Urgency: </b>
+                        {% if filing.filing_urgency %}
+                        <a href="{{filing.urgencyFile.url}}" style="color: red;">Yes [Urgency Note here]</a>
+                        {% else %}
+                        <span class="noUrgency">No</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <br>
+                <div class="col-12">
+                    <p>
+                        <b>1. Index: </b>
+                        <a href="{{filing.indexFile.url}}">Index file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>2. List of events: </b>
+                        <a href="{{filing.LoEventsFile.url}}">Event list file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>3. Synopsis: </b>
+                        <a href="{{filing.synopsisFile.url}}">Synopsis file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>4. Memo of Petetion/ Application/ Appeal with Affidavit: </b>
+                        <a href="{{filing.memoFile.url}}">Memo and Affidavit file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>5. Impunged Order/ Judgement/ FIR/ Chargesheet: </b>
+                        <a href="{{filing.pastFile.url}}">Impunged Order/ Judgement/ FIR/ Chargesheet file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>6. Annextures: </b>
+                        <a href="{{filing.annexFile.url}}">Annextures file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>7. Memo of Petetion/ Application/ Appeal with Affidavit: </b>
+                        <a href="{{filing.memoFile.url}}">Memo and Affidavit file pdf</a>
+                    </p>
+                </div>
+                <div class="col-12">
+                    <p>
+                        <b>8. Other files: </b>
+                        <span class="noOther">N.A.</span>
+                        <span class="others"><a href="{{filing.othFile.url}}">Other files pdf</a></span>
+                    </p>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-4">
+                        <span><b>Status:</b></span>
+                        {% if filing.filing_status is 3 %}
+                            <span style="color: purple;">Pending</span>
+                        {% else %}
+                            {% if filing.filing_status is 0 %}
+                                <span style="color: red;">Rejected</span>
+                            {% else %}
+                                {% if filing.filing_status is 1 %}
+                                    <span style="color: green;">Accepted:</span>
+                                    {% if filing.filing_case %}
+                                        {{filing.filing_case}}
+                                    {% else %}
+                                        N.A.
+                                    {% endif %}
+                                {% else %}
+                                    <span style="color: brown;">Error!</span>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <br>
+                    <div class="col-12">
+                        <p>
+                            <b>Office comments:</b>
+                            {{ filing.filing_comments }}
+                        </p>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<h1>This page is for office use only!</h1>
+{% endif %}
+
+{% endblock %}

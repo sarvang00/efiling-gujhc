@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if is_officer %}
+
+<!-- Navbar  -->
+{% include 'partials/_navbar-officer.html' %}
+
+<!--Alerts included here -->
+{% include 'partials/_alerts.html' %}
+
+<!-- Main Content Start -->
+<div class="container-fluid">
+    <br>
+    <br>
+    {% if filings %}
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <div class="table-responsive">
+                <table id="filing-table" class="table table-striped table-bordered table-hover table-fw-widget">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Matter Type</th>
+                            <th scope="col">Case Type</th>
+                            <th scope="col">Advocate</th>
+                            <th scope="col">Urgency</th>
+                            <th scope="col">Filing Timestamp</th>
+                            <th scope="col">View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for filing in filings %}
+                        <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{ filing.matter_type }}</td>
+                            <td>{{ filing.case_type }}</td>
+                            <td>{{ filing.advocate_hc_code}} - {{ filing.filing_advocate.first_name }}
+                                {{ filing.filing_advocate.last_name }}</td>
+                            <td>
+                                {% if filing.filing_urgency == True %}
+                                <span style="color: red;">Yes</span>
+                                {% else %}
+                                <span style="color: black;">No</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ filing.filing_time}}</td>
+                            <td><a href="{% url 'view_filing' filing.id %}">View filing</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-4">
+        </div>
+        <div class="col-4" style="text-align: center;">
+            No e-filing petetion filed till date.
+        </div>
+    </div>
+    <br>
+    {% endif %}
+</div>
+
+{% else %}
+<h1>This page is for office use only!</h1>
+{% endif %}
+
+<script>
+    $(document).ready(function () {
+        $('#filing-table').dataTable({
+            "searching": true,
+            "paging": true,
+            "ordering": true
+        });
+    });
+</script>
+
+{% endblock %}
