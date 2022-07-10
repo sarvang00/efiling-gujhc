@@ -80,9 +80,9 @@ After that, they need to create 3 groups, namely:
 After that, they can log out.
 
 ### Notice
-This is a private project which may or may not be passed on to the High Court of Gujarat. Any unauthorized access and sharing of any of the code here may be liable to be prosecuted by law. 
+Scope of this project seems to be achieved with no plans for further development. This project is hence, archived till further notice.
 
 --
 Sarvang Dave,
-23 May, 2020, 
+10 July, 2022, 
 Ahmedabad, Gujarat, India
